@@ -4,7 +4,6 @@ import { getScenarioContext } from '../support/scenarioContext';
 export interface AddPanelConfig extends ConfigurePanelConfig {
   dataSourceName: string;
   queriesForm: (config: AddPanelConfig) => void;
-  panelTitle: string;
   visualizationName: string;
 }
 
