@@ -131,6 +131,11 @@ export const configurePanel = (config: Partial<ConfigurePanelConfig>, isEdit: bo
       .url()
       .should('include', `/d/${dashboardUid}`);
 
+    // Avoid annotations flakiness
+    e2e()
+      .get('.refresh-picker-buttons > .btn')
+      .click();
+
     e2e().wait('@chartData');
 
     // Wait for RxJS
