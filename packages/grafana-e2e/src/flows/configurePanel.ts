@@ -1,3 +1,4 @@
+import { DashboardTimeRangeConfig, setDashboardTimeRange } from './setDashboardTimeRange';
 import { e2e } from '../index';
 import { getLocalStorage, requireLocalStorage } from '../support/localStorage';
 import { getScenarioContext } from '../support/scenarioContext';
@@ -10,10 +11,12 @@ export interface ConfigurePanelConfig {
   };
   dashboardUid: string;
   dataSourceName?: string;
+  isExplore: boolean;
   matchScreenshot: boolean;
   queriesForm?: (config: any) => void;
   panelTitle: string;
   screenshotName: string;
+  timeRange?: DashboardTimeRangeConfig;
   visitDashboardAtStart: boolean; // @todo remove when possible
   visualizationName?: string;
 }
@@ -28,6 +31,7 @@ export const configurePanel = (config: Partial<ConfigurePanelConfig>, isEdit: bo
         route: '/api/ds/query',
       },
       dashboardUid: lastAddedDashboardUid,
+      isExplore: false,
       matchScreenshot: false,
       saveDashboard: true,
       screenshotName: 'chart',
@@ -39,24 +43,32 @@ export const configurePanel = (config: Partial<ConfigurePanelConfig>, isEdit: bo
       chartData,
       dashboardUid,
       dataSourceName,
+      isExplore,
       matchScreenshot,
       panelTitle,
       queriesForm,
       screenshotName,
+      timeRange,
       visitDashboardAtStart,
       visualizationName,
     } = fullConfig;
 
-    if (visitDashboardAtStart) {
-      e2e.flows.openDashboard({ uid: dashboardUid });
+    if (!isExplore) {
+      if (visitDashboardAtStart) {
+        e2e.flows.openDashboard({ uid: dashboardUid });
+      }
+
+      if (isEdit) {
+        e2e.components.Panels.Panel.title(panelTitle).click();
+        e2e.components.Panels.Panel.headerItems('Edit').click();
+      } else {
+        e2e.pages.Dashboard.Toolbar.toolbarItems('Add panel').click();
+        e2e.pages.AddDashboard.addNewPanel().click();
+      }
     }
 
-    if (isEdit) {
-      e2e.components.Panels.Panel.title(panelTitle).click();
-      e2e.components.Panels.Panel.headerItems('Edit').click();
-    } else {
-      e2e.pages.Dashboard.Toolbar.toolbarItems('Add panel').click();
-      e2e.pages.AddDashboard.addNewPanel().click();
+    if (timeRange) {
+      setDashboardTimeRange(timeRange);
     }
 
     e2e().server();
@@ -76,35 +88,37 @@ export const configurePanel = (config: Partial<ConfigurePanelConfig>, isEdit: bo
 
     e2e().wait('@chartData');
 
-    // `panelTitle` is needed to edit the panel, and unlikely to have its value changed at that point
-    const changeTitle = panelTitle && !isEdit;
+    if (!isExplore) {
+      // `panelTitle` is needed to edit the panel, and unlikely to have its value changed at that point
+      const changeTitle = panelTitle && !isEdit;
 
-    if (changeTitle || visualizationName) {
-      openOptions();
+      if (changeTitle || visualizationName) {
+        openOptions();
 
-      if (changeTitle) {
-        openOptionsGroup('settings');
-        getOptionsGroup('settings')
-          .find('[value="Panel Title"]')
-          .scrollIntoView()
-          .clear()
-          .type(panelTitle);
+        if (changeTitle) {
+          openOptionsGroup('settings');
+          getOptionsGroup('settings')
+            .find('[value="Panel Title"]')
+            .scrollIntoView()
+            .clear()
+            .type(panelTitle);
+        }
+
+        if (visualizationName) {
+          openOptionsGroup('type');
+          e2e.components.PluginVisualization.item(visualizationName)
+            .scrollIntoView()
+            .click();
+        }
+
+        // Consistently closed
+        closeOptionsGroup('settings');
+        closeOptionsGroup('type');
+        closeOptions();
+      } else {
+        // Consistently closed
+        closeOptions();
       }
-
-      if (visualizationName) {
-        openOptionsGroup('type');
-        e2e.components.PluginVisualization.item(visualizationName)
-          .scrollIntoView()
-          .click();
-      }
-
-      // Consistently closed
-      closeOptionsGroup('settings');
-      closeOptionsGroup('type');
-      closeOptions();
-    } else {
-      // Consistently closed
-      closeOptions();
     }
 
     if (queriesForm) {
@@ -123,13 +137,15 @@ export const configurePanel = (config: Partial<ConfigurePanelConfig>, isEdit: bo
     //e2e.components.QueryEditorRow.actionButton('Disable/enable query').click();
     //e2e().wait('@chartData');
 
-    e2e()
-      .get('button[title="Apply changes and go back to dashboard"]')
-      .click();
+    if (!isExplore) {
+      e2e()
+        .get('button[title="Apply changes and go back to dashboard"]')
+        .click();
 
-    e2e()
-      .url()
-      .should('include', `/d/${dashboardUid}`);
+      e2e()
+        .url()
+        .should('include', `/d/${dashboardUid}`);
+    }
 
     // Avoid annotations flakiness
     e2e()
@@ -142,7 +158,7 @@ export const configurePanel = (config: Partial<ConfigurePanelConfig>, isEdit: bo
     e2e().wait(500);
 
     if (matchScreenshot) {
-      e2e.components.Panels.Panel.containerByTitle(panelTitle)
+      e2e.components.Panels.Panel.containerByTitle(isExplore ? VISUALIZATION_GRAPH : panelTitle)
         .find('.panel-content')
         .scrollIntoView()
         .screenshot(screenshotName);
