@@ -26,6 +26,8 @@ import {
   StoreState,
 } from 'app/types';
 
+import { store } from 'app/store/store';
+
 import { DashboardModel, PanelModel } from 'app/features/dashboard/state';
 import { InspectTab } from '../components/Inspector/types';
 import { PanelInspector } from '../components/Inspector/PanelInspector';
@@ -88,6 +90,16 @@ export class DashboardPage extends PureComponent<Props, State> {
       routeInfo: this.props.routeInfo,
       fixUrl: true,
     });
+  }
+
+  handleFrameTasks = (event: any) => {
+    if (event.origin === 'https://172.28.3.117') {
+      store.dispatch(
+        updateLocation({
+          query: event.data,
+        })
+      )
+    }
   }
 
   componentWillUnmount() {
@@ -301,6 +313,7 @@ export class DashboardPage extends PureComponent<Props, State> {
     const approximateScrollTop = Math.round(scrollTop / 25) * 25;
     const inspectPanel = this.getInspectPanel();
 
+    window.addEventListener('message', this.handleFrameTasks, false);
     return (
       <div className="dashboard-container">
         <DashNav dashboard={dashboard} isFullscreen={!!viewPanel} $injector={$injector} onAddPanel={this.onAddPanel} />

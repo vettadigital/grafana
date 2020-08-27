@@ -44,7 +44,7 @@ export class KeybindingSrv {
   }
 
   setupGlobal() {
-    if (!(this.$location.path() === '/login')) {
+    /*if (!(this.$location.path() === '/login')) {
       this.bind(['?', 'h'], this.showHelpModal);
       this.bind('g h', this.goToHome);
       this.bind('g a', this.openAlerting);
@@ -53,7 +53,7 @@ export class KeybindingSrv {
       this.bind('f', this.openSearch);
       this.bind('esc', this.exit);
       this.bindGlobal('esc', this.globalEsc);
-    }
+    }*/
   }
 
   globalEsc() {

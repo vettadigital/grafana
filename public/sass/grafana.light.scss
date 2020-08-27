@@ -1,3 +1,69 @@
 @import 'variables.generated';
 @import 'variables.light.generated';
 @import 'grafana';
+
+.page-dashboard .main-view, .page-explore .main-view {
+  background: #e0e0e0;
+}
+
+.panel-container {
+  background-color: #fff;
+  border: 0px;
+  border-radius: 0px;
+}
+
+.panel-content {
+  padding: 16px;
+  height: calc(100% + 32px);
+  height: calc(100% + 32px);
+  box-sizing: border-box;
+}
+
+.panel-title {
+  justify-content: left;
+  height: 48px;
+  line-height: 48px;
+  padding: 0px 16px;
+}
+
+.panel-title-text {
+  font-size: 14px;
+  font-weight: 500;
+  color: #0075be;
+}
+
+.panel-title-text:hover {
+  color: #0075be;
+}
+
+.panel-header:hover {
+  background-color: #FFFFFF;
+}
+
+.dropdown-menu {
+  border: 1px solid #e0e0e0;
+}
+
+.dropdown-menu .divider {
+  margin: 0px 0;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.dropdown-menu>li>a {
+  color: #393939;
+}
+
+.dropdown-menu--menu>li>a, .dropdown-menu--navbar>li>a, .dropdown-menu--sidemenu>li>a {
+  padding: 5px 10px;
+  border-left: 4px solid rgba(0,0,0,0);
+}
+
+.dropdown-menu--menu>li>a:hover, .dropdown-menu--navbar>li>a:hover, .dropdown-menu--sidemenu>li>a:hover {
+  -o-border-image: -o-linear-gradient(#0075be 30%,#0075be 99%);
+  border-image: -webkit-gradient(linear,left top,left bottom,color-stop(30%,#0075be),color-stop(99%,#0075be));
+  border-image: -webkit-linear-gradient(#0075be 30%,#0075be 99%);
+  border-image: linear-gradient(#0075be 30%,#0075be 99%);
+  border-left-width: 4px;
+  color: #161616;
+  background: #f4f4f4!important;
+}
