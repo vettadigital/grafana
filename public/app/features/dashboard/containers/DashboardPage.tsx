@@ -98,9 +98,9 @@ export class DashboardPage extends PureComponent<Props, State> {
         updateLocation({
           query: event.data,
         })
-      )
+      );
     }
-  }
+  };
 
   componentWillUnmount() {
     this.props.cleanUpDashboardAndVariables();
