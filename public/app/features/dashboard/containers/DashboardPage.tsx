@@ -79,6 +79,14 @@ export class DashboardPage extends PureComponent<Props, State> {
     rememberScrollTop: 0,
   };
 
+  handleFrameTasks = (event: any) => {
+    store.dispatch(
+      updateLocation({
+        query: event.data,
+      })
+    );
+  };
+
   async componentDidMount() {
     this.props.initDashboard({
       $injector: this.props.$injector,
@@ -91,16 +99,6 @@ export class DashboardPage extends PureComponent<Props, State> {
       fixUrl: true,
     });
   }
-
-  handleFrameTasks = (event: any) => {
-    if (event.origin === 'https://172.28.3.117') {
-      store.dispatch(
-        updateLocation({
-          query: event.data,
-        })
-      );
-    }
-  };
 
   componentWillUnmount() {
     this.props.cleanUpDashboardAndVariables();
