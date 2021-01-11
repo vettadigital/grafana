@@ -80,6 +80,7 @@ export class DashboardPage extends PureComponent<Props, State> {
   };
 
   handleFrameTasks = (event: any) => {
+    console.log('event.data:', event.data);
     store.dispatch(
       updateLocation({
         query: event.data,
