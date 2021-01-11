@@ -110,6 +110,8 @@ export class DashboardPage extends PureComponent<Props, State> {
     const { dashboard, urlEditPanelId, urlViewPanelId, urlUid } = this.props;
     const { editPanel, viewPanel } = this.state;
 
+    console.log('Grafana atualizou');
+
     if (!dashboard) {
       return;
     }
