@@ -144,7 +144,7 @@ export const getLogRowStyles = stylesFactory((theme: GrafanaTheme, logLevel?: Lo
       border: 1px solid ${borderColor};
       padding: 0 ${theme.spacing.sm} ${theme.spacing.sm};
       border-radius: 3px;
-      margin: 20px 8px 20px 16px;
+      margin: 20px 8px 20px 56px;
       cursor: default;
     `,
     logDetailsTable: css`

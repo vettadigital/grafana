@@ -99,11 +99,13 @@ export class DashboardPage extends PureComponent<Props, State> {
       routeInfo: this.props.routeInfo,
       fixUrl: true,
     });
+    window.addEventListener('message', this.handleFrameTasks, false);
   }
 
   componentWillUnmount() {
     this.props.cleanUpDashboardAndVariables();
     this.setPanelFullscreenClass(false);
+    window.removeEventListener('message', this.handleFrameTasks);
   }
 
   componentDidUpdate(prevProps: Props) {
@@ -312,9 +314,8 @@ export class DashboardPage extends PureComponent<Props, State> {
 
     // Only trigger render when the scroll has moved by 25
     const approximateScrollTop = Math.round(scrollTop / 25) * 25;
-    const inspectPanel = this.getInspectPanel();
 
-    window.addEventListener('message', this.handleFrameTasks, false);
+    const inspectPanel = this.getInspectPanel();
     return (
       <div className="dashboard-container">
         <DashNav dashboard={dashboard} isFullscreen={!!viewPanel} $injector={$injector} onAddPanel={this.onAddPanel} />

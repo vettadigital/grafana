@@ -56,6 +56,7 @@ public/css/*.min.css
 /devenv/.env
 
 conf/custom.ini
+conf/defaults.ini
 /conf/provisioning/**/custom.yaml
 /conf/provisioning/**/dev.yaml
 /conf/ldap_dev.toml
