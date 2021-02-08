@@ -80,7 +80,6 @@ export class DashboardPage extends PureComponent<Props, State> {
   };
 
   handleFrameTasks = (event: any) => {
-    console.log('event.data:', event.data);
     store.dispatch(
       updateLocation({
         query: event.data,
@@ -111,9 +110,6 @@ export class DashboardPage extends PureComponent<Props, State> {
   componentDidUpdate(prevProps: Props) {
     const { dashboard, urlEditPanelId, urlViewPanelId, urlUid } = this.props;
     const { editPanel, viewPanel } = this.state;
-
-    console.log('Dashboard carregou, msg do DashboardPage.tsx!');
-
     if (!dashboard) {
       return;
     }
@@ -303,7 +299,7 @@ export class DashboardPage extends PureComponent<Props, State> {
       updateLocation,
     } = this.props;
 
-    const { editPanel, viewPanel, scrollTop, updateScrollTop } = this.state;
+    const { editPanel, viewPanel, scrollTop /* , updateScrollTop  */ } = this.state;
 
     if (!dashboard) {
       if (isInitSlow) {
@@ -319,7 +315,7 @@ export class DashboardPage extends PureComponent<Props, State> {
     return (
       <div className="dashboard-container">
         <DashNav dashboard={dashboard} isFullscreen={!!viewPanel} $injector={$injector} onAddPanel={this.onAddPanel} />
-
+        {/*
         <div className="dashboard-scroll">
           <CustomScrollbar
             autoHeightMin="100%"
@@ -327,21 +323,21 @@ export class DashboardPage extends PureComponent<Props, State> {
             scrollTop={updateScrollTop}
             updateAfterMountMs={500}
             className="custom-scrollbar--page"
-          >
-            <div className="dashboard-content">
-              {initError && this.renderInitFailedState()}
-              {!editPanel && <SubMenu dashboard={dashboard} links={dashboard.links} />}
+          > */}
+        <div className="dashboard-content">
+          {initError && this.renderInitFailedState()}
+          {!editPanel && <SubMenu dashboard={dashboard} links={dashboard.links} />}
 
-              <DashboardGrid
-                dashboard={dashboard}
-                viewPanel={viewPanel}
-                editPanel={editPanel}
-                scrollTop={approximateScrollTop}
-                isPanelEditorOpen={isPanelEditorOpen}
-              />
-            </div>
-          </CustomScrollbar>
+          <DashboardGrid
+            dashboard={dashboard}
+            viewPanel={viewPanel}
+            editPanel={editPanel}
+            scrollTop={approximateScrollTop}
+            isPanelEditorOpen={isPanelEditorOpen}
+          />
         </div>
+        {/*    </CustomScrollbar>
+        </div> */}
 
         {inspectPanel && <PanelInspector dashboard={dashboard} panel={inspectPanel} defaultTab={inspectTab} />}
         {editPanel && <PanelEditor dashboard={dashboard} sourcePanel={editPanel} />}
