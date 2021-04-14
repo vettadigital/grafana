@@ -87,6 +87,10 @@ export class DashboardPage extends PureComponent<Props, State> {
     );
   };
 
+  handleWheel = (event: any) => {
+    window.top.postMessage({ type: 'wheelCapture', deltaY: event.deltaY }, '*');
+  };
+
   async componentDidMount() {
     this.props.initDashboard({
       $injector: this.props.$injector,
@@ -99,12 +103,14 @@ export class DashboardPage extends PureComponent<Props, State> {
       fixUrl: true,
     });
     window.addEventListener('message', this.handleFrameTasks, false);
+    window.addEventListener('wheel', this.handleWheel, false);
   }
 
   componentWillUnmount() {
     this.props.cleanUpDashboardAndVariables();
     this.setPanelFullscreenClass(false);
     window.removeEventListener('message', this.handleFrameTasks);
+    window.addEventListener('wheel', this.handleWheel);
   }
 
   componentDidUpdate(prevProps: Props) {
