@@ -88,7 +88,9 @@ export class DashboardPage extends PureComponent<Props, State> {
   };
 
   handleWheel = (event: any) => {
-    window.top.postMessage({ type: 'wheelCapture', deltaY: event.deltaY }, '*');
+    if (window.location !== window.parent.location) {
+      window.parent.postMessage({ type: 'wheelCapture', deltaY: event.deltaY }, '*');
+    }
   };
 
   async componentDidMount() {
